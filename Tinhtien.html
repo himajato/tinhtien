@@ -1,0 +1,179 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinh tien gui xe</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="warning">
+        (Lưu ý: Nhập giờ ra phải lớn hơn giờ vào)
+    </div>
+    <div class="main-container">
+        <div class="header">
+            Tính tiền gửi xe
+        </div>
+        <div style="display: flex;">
+            <div class="hour">
+                <div style="margin-bottom: 12px;font-weight: bold;">
+                    Giờ vào
+                </div>
+                <input id="gioVao" type="datetime-local">
+            </div>
+            <div class="hour">
+                <div style="margin-bottom: 12px; font-weight: bold;">
+                    Giờ ra
+                </div>
+                <input id="gioRa" type="datetime-local">
+            </div>
+        </div>
+        <div class="type">
+            Chọn loại xe
+        </div>
+        <div>
+            <input type="radio" id="oto1" name="trafic_car" value="1">
+            <label for="oto1">Xe ô tô dưới 12 ghế và ô tô có trọng tải dưới 4 tấn</label><br>
+            <input type="radio" id="oto2" name="trafic_car" value="2">
+            <label for="oto2">Xe ô tô từ 12 - 30 ghế ngồi và xe ô tô có trọng tải từ 4 tấn đến dưới 10 tấn</label><br>
+            <input type="radio" id="oto3" name="trafic_car" value="3">
+            <label for="oto3">Xe ô tô từ 31 ghế trở lên và xe ô tô có trọng tải từ 10 tấn đến dưới 18 tấn</label><br>
+            <input type="radio" id="oto4" name="trafic_car" value="4">
+            <label for="oto4">Xe ô tô có trọng tải từ 18 tấn trở lên</label><br>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; margin-top: 40px;">
+            <div id="btnTinh" class="button-cal">
+                Tính
+            </div>
+        </div>
+        <div class="result">
+            <div style="margin-right: 16px">
+                Kết quả:
+            </div>
+            <div id="ketqua">
+            </div>
+            <div style="margin-left: 20px;">K</div>
+        </div>
+        <div class="receive">
+            <div style="margin-right: 20px; margin-top: 15px;">
+                Nhận: 
+            </div>
+            <input type="number" id="nhan">
+            <div style="margin-top: 10px;margin-left: 10px;">K</div>
+        </div>
+        <div style="margin-top: 40px;border-top: 1px solid red; display: flex;">
+            <div style="margin-top: 20px;">
+                Phải trả: 
+            </div>
+            <div id="phaitra" style="margin-top: 20px; margin-left: 20px;">
+
+            </div>
+        </div>
+    </div>
+    <!-- Nhúng thư viện vào trước -->
+    <script src="/lib/jquery-3.6.0.min.js"></script>
+    <!-- Nhúng những thứ dùng chung sau thư viện -->
+    <!-- <script scr="/js/tinhtien.js"></script> -->
+    <script>
+
+        $(document).ready(function () {
+
+            var ketqua = 0;
+            var giasang = 0;
+            var giachieu = 0;
+            var thanhtien = 0;
+            $('.button-cal').click(function () {
+                ketqua = 0;
+                var type = $('input[name="trafic_car"]:checked').val();
+                switch (type) {
+                    case "1":
+                        giasang = 15;
+                        giachieu = 22.5;
+                        break;
+                    case "2": 
+                        giasang = 20;
+                        giachieu = 30;
+                        break;
+                    case "3": 
+                        giasang = 25;
+                        giachieu = 37.5;
+                        break;
+                    case "4": 
+                        giasang = 35;
+                        giachieu = 52.5;
+                        break;
+                    default:
+                        break;
+                }
+                let dateIn = new Date($("#gioVao").val()).toLocaleDateString("en-US");
+                let dateOut = new Date($("#gioRa").val()).toLocaleDateString("en-US");
+                let dayIn = new Date($("#gioVao").val()).getTime();
+                let dayOut = new Date($("#gioRa").val()).getTime();
+                let diff = (dayOut - dayIn)/(1000 * 3600 * 24);
+                let gioVao = new Date($("#gioVao").val()).getHours();
+                let gioRa = new Date($("#gioRa").val()).getHours();
+                if (dateIn == dateOut) {
+                    if(gioVao > 5 && gioVao < 22){
+                       if(gioRa > gioVao){
+                           if(gioRa < 22){
+                               ketqua = ketqua + giasang;
+                           } else ketqua = ketqua + giasang + giachieu;
+                       }
+                    } else if(gioVao <6 ) {
+                        if(gioRa > gioVao){
+                            if(gioRa < 6){
+                                ketqua = ketqua + giachieu;
+                            } else if(gioRa >5 && gioRa <22){
+                                ketqua = ketqua + giachieu + giasang;
+                            } else if(gioRa >21) {
+                                ketqua = ketqua + giasang + giachieu + giasang;
+                            }
+                        }
+                    } else if(gioVao > 21){
+                        if(gioRa > gioVao){
+                            ketqua = ketqua + giachieu;
+                        }
+                    }
+                   
+                } else{
+                    if(diff.toFixed(0)==0){
+                        ketqua = ketqua + (giasang+giachieu)*(parseInt(diff.toFixed(0)));
+                    } else ketqua = ketqua + (giasang+giachieu)*(parseInt(Math.trunc(diff))-1);
+                    if(gioVao < 6){
+                        ketqua = ketqua + giachieu + giasang;
+                    } else if( gioVao >5 && gioVao < 22) {
+                        ketqua = ketqua + giasang;
+                    } else if(gioVao > 21){
+                        console.log(ketqua);
+                    }
+                    if(gioRa < 6){
+                        ketqua = ketqua + giachieu;
+                    } else if(gioRa >5 && gioRa < 22){
+                        ketqua = ketqua + giachieu + giasang;
+                    } else if(gioRa > 21){
+                        console.log(ketqua);
+                        console.log(Math.trunc(diff));
+                        ketqua = ketqua + giachieu + giasang + giachieu;
+                    }
+                }
+                $("#ketqua").html(ketqua);
+                ketqua = thanhtien;
+
+            });
+            $("#nhan").on("input",function(){
+                var nhan = $("#nhan").val();
+                console.log($("#ketqua").html());
+                $("#phaitra").html(parseInt(nhan) - parseInt($("#ketqua").html()) + "   K");
+            })  
+        });
+
+        function checkType() {
+            // if($('input["trafic_car"]:checked').val())
+            console.log($('input[name="trafic_car"]:checked').val());
+        }
+    </script>
+</body>
+
+</html>

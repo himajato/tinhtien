@@ -1,0 +1,89 @@
+.main-container{
+    background-color: #f8affa;
+    height: 600px;
+    width: 700px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%); 
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+    font-size: 20px;
+    font-family: GoogleSan;
+}
+
+.header{
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hour{
+    margin-top: 20px;
+    width: 50%;
+}
+
+.type{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.button-cal{
+    background-color: #d41cd4;
+    height: 36px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-cal:hover{
+    background-color: #ed07ed;
+}
+
+.button-cal:active{
+    background-color: #d41cd4;
+}
+
+.result{
+    margin-top: 25px;
+    display: flex;
+    width: fit-content;
+}
+
+.receive{
+    display: flex;
+    align-items: center;
+
+}
+
+.receive input{
+    margin-top: 10px;
+    height: 30px;
+    font-size: 20px;
+    width: 100px;
+}
+
+.warning{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: GoogleSan-italic;
+    color: red;
+    padding-top: 35px;
+}
+
+@font-face {
+    font-family: GoogleSan;
+    src: url("/font/GoogleSans-Regular.otf");
+}
+
+@font-face {
+    font-family: GoogleSan-italic;
+    src: url("/font/GoogleSans-MediumItalic.otf");
+}
